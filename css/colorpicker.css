@@ -1,0 +1,74 @@
+#colorpickerContainer *{
+    box-sizing: border-box;
+}
+#colorpickerContainer{
+    width: 350px;
+    /*height: 330px;*/
+    float: left;
+    background: #252525;
+    padding: 5px;
+}
+canvas{
+    float: left;
+    cursor: crosshair;
+}
+#value{
+    width: 30px;
+    height: 300px;
+    float: left;
+}
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 100%;
+    padding: 0 5px;
+}
+#colorPreview,
+#colorSelected{
+    width: 50%;
+    height: 30px;
+    float: left;
+    background: transparent;
+}
+.pickerContainer{
+    width: 100%;
+    float: left;
+    display: none;
+    padding: 10px;
+}
+.pickerContainer.active{
+    display: block;
+}
+#tabs{
+    width: 100%;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+#tabs ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+#tabs ul li{
+    padding: 0px 5px;
+    width: auto;
+    float: left;
+    color: #eee;
+    height: 30px;
+    line-height: 30px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-bottom: none;
+}
+#tabs ul li.active{
+    color: #09c;
+}
+#colorpickerCircle{
+    border-radius: 100%;
+}

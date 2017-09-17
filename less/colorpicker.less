@@ -1,0 +1,118 @@
+#colorpickerContainer {
+    width: 350px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background: #252525;
+    padding: 5px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    * {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        box-sizing: border-box;
+    }
+    #tabs {
+        width: 100%;
+        float: left;
+        height: 30px;
+        line-height: 30px;
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            li {
+                padding: 0px 5px;
+                width: auto;
+                float: left;
+                color: #eee;
+                height: 30px;
+                line-height: 30px;
+                cursor: pointer;
+                border: 1px solid #ddd;
+                border-bottom: none;
+                &.active {
+                    color: #09c;
+                }
+            }
+        }
+    }
+    #pickers {
+        .pickerContainer {
+            width: 100%;
+            float: left;
+            display: none;
+            padding: 10px;
+            &.active {
+                display: block;
+            }
+            canvas {
+                float: left;
+                cursor: crosshair;
+                &#colorpickerCircle {
+                    border-radius: 100%;
+                }
+
+            }
+            #value {
+                width: 30px;
+                height: 300px;
+                float: left;
+                position: relative;
+                #selectpreview {
+                    content: ' ';
+                    position: absolute;
+                    top: 0;
+                    left: 30px;
+                    width: 30px;
+                    height: 10px;
+                    display: none;
+                    -webkit-transform: translate(0, -50%);
+                    -moz-transform: translate(0, -50%);
+                    -ms-transform: translate(0, -50%);
+                    -o-transform: translate(0, -50%);
+                    transform: translate(0, -50%);
+                    border: 1px solid rgba(44, 30, 0, 0.59);
+                }
+                #colorselect {
+                    cursor: pointer;
+                    &:hover {
+                        & + #selectpreview {
+                            display: block;
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+    #colorPreview,
+    #colorSelected {
+        width: 50%;
+        height: 30px;
+        float: left;
+        background: transparent;
+    }
+}
+
+input[type=range][orient=vertical] {
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 100%;
+    padding: 0 5px;
+}
+

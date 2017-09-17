@@ -14,6 +14,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  display: none;
 }
 #colorpickerContainer * {
   -webkit-user-select: none;
@@ -50,6 +51,10 @@
 #colorpickerContainer #tabs ul li.active {
   color: #09c;
 }
+#colorpickerContainer #pickers {
+  width: 100%;
+  float: left;
+}
 #colorpickerContainer #pickers .pickerContainer {
   width: 100%;
   float: left;
@@ -59,12 +64,16 @@
 #colorpickerContainer #pickers .pickerContainer.active {
   display: block;
 }
+#colorpickerContainer #pickers .pickerContainer#circle {
+  text-align: center;
+}
 #colorpickerContainer #pickers .pickerContainer canvas {
   float: left;
   cursor: crosshair;
 }
 #colorpickerContainer #pickers .pickerContainer canvas#colorpickerCircle {
   border-radius: 100%;
+  float: none;
 }
 #colorpickerContainer #pickers .pickerContainer #value {
   width: 30px;
@@ -93,19 +102,29 @@
 #colorpickerContainer #pickers .pickerContainer #value #colorselect:hover + #selectpreview {
   display: block;
 }
-#colorpickerContainer #colorPreview,
-#colorpickerContainer #colorSelected {
+#colorpickerContainer #preview {
+  float: left;
+  width: 100%;
+}
+#colorpickerContainer #preview #colorPreview,
+#colorpickerContainer #preview #colorSelected {
   width: 50%;
   height: 30px;
   float: left;
   background: transparent;
 }
-input[type=range][orient=vertical] {
-  writing-mode: bt-lr;
-  /* IE */
-  -webkit-appearance: slider-vertical;
-  /* WebKit */
-  width: 8px;
-  height: 100%;
-  padding: 0 5px;
+#colorpickerContainer #colors {
+  color: #ffffff;
+  width: 100%;
+  float: left;
+}
+#colorpickerContainer #colors p {
+  width: 100%;
+  float: left;
+}
+#colorpickerContainer #colors p span:first-child {
+  float: left;
+}
+#colorpickerContainer #colors p input:last-child {
+  float: right;
 }

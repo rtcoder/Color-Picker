@@ -111,9 +111,9 @@ var Convert = {
             type: 'all',
             colorValues: true,
             closeOn: 'change',
-            onchange: function (color) {
+            onChange: function (color) {
             },
-            onrender: function () {
+            onRender: function () {
             }
         };
         this.colorsampler = function (event, obj) {
@@ -277,7 +277,7 @@ var Convert = {
                     $('#colorPreview').css('background', $this.colorsampler(e, this));
                 }).on('click', function (e) {
                     $('#colorSelected').css('background', $this.colorsampler(e, this));
-                    $this.defaultOptions.onchange();
+                    $this.defaultOptions.onChange();
                 });
                 $(canvasSelectHSV).on('mousedown', function (e) {
                     selectMusedown = true;
@@ -329,18 +329,18 @@ var Convert = {
             if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'circle') {
                 this.generateCircleColorpicker();
             }
-            this.defaultOptions.onrender();
+            this.defaultOptions.onRender();
         };
 
         if (typeof options !== 'object' && typeof options !== 'undefined') {
             throw new InvalidTypeError("param 'options' must be an Object not " + typeof options);
         }
         $.extend(this.defaultOptions, options);
-        if (typeof this.defaultOptions.onchange !== 'function') {
-            throw new InvalidTypeError("param 'options.onchange' must be a function not " + typeof this.defaultOptions.onchange);
+        if (typeof this.defaultOptions.onChange !== 'function') {
+            throw new InvalidTypeError("param 'options.onChange' must be a function not " + typeof this.defaultOptions.onChange);
         }
-        if (typeof this.defaultOptions.onrender !== 'function') {
-            throw new InvalidTypeError("param 'options.onrender' must be a function not " + typeof this.defaultOptions.onrender);
+        if (typeof this.defaultOptions.onRender !== 'function') {
+            throw new InvalidTypeError("param 'options.onRender' must be a function not " + typeof this.defaultOptions.onRender);
         }
         if ($.inArray(this.defaultOptions.type, this.types) < 0) {
             console.log($.inArray(this.defaultOptions.type, this.types))

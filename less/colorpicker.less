@@ -1,4 +1,4 @@
-#colorpickerContainer {
+.colorpickerContainer {
     width: 350px;
     position: fixed;
     top: 50%;
@@ -22,7 +22,7 @@
         user-select: none;
         box-sizing: border-box;
     }
-    #tabs {
+    .tabs {
         width: 100%;
         float: left;
         height: 30px;
@@ -50,7 +50,7 @@
             }
         }
     }
-    #pickers {
+    .pickers {
         width: 100%;
         float: left;
         .pickerContainer {
@@ -67,17 +67,17 @@
             canvas {
                 float: left;
                 cursor: crosshair;
-                &#colorpickerCircle {
+                &.colorpickerCircle {
                     border-radius: 100%;
                     float: none;
                 }
             }
-            #value {
+            .value {
                 width: 30px;
                 height: 300px;
                 float: left;
                 position: relative;
-                #selectpreview {
+                .selectpreview {
                     content: ' ';
                     position: absolute;
                     top: 0;
@@ -92,10 +92,10 @@
                     transform: translate(0, -50%);
                     border: 1px solid rgba(44, 30, 0, 0.59);
                 }
-                #colorselect {
+                .colorselect {
                     cursor: pointer;
                     &:hover {
-                        & + #selectpreview {
+                        & + .selectpreview {
                             display: block;
                         }
                     }
@@ -104,18 +104,18 @@
             }
         }
     }
-    #preview {
+    .preview {
         float: left;
         width:100%;
-        #colorPreview,
-        #colorSelected {
+        .colorPreview,
+        .colorSelected {
             width: 50%;
             height: 30px;
             float: left;
             background: transparent;
         }
     }
-    #colors{
+    .colors{
         color: #ffffff;
         width: 100%;
         float: left;

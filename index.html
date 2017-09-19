@@ -7,8 +7,36 @@
         <link rel="stylesheet" href="css/colorpicker.css">
     </head>
     <body>
-        <button>sdad</button>
+        <button id="a">sdad</button>
+        <button id="b">sdad</button>
         <script src="js/jquery-2.1.4.min.js"></script>
         <script src="js/colorpicker.js"></script>
+        <script>
+
+            $('button#a').colorpicker({
+                type: 'hsv',
+                onChange: function (color) {
+                    $('button#a').css({
+                        'color': color
+
+                    })
+                },
+                onShow: function () {
+                    alert();
+                }
+            });
+            $('button#b').colorpicker({
+                type: 'all',
+                onChange: function (color) {
+                    $('button#b').css({
+                        'background-color': color
+                    })
+                    alert('kolor: ' + color)
+                },
+                onShow: function () {
+                    alert('sd');
+                }
+            });
+        </script>
     </body>
 </html>

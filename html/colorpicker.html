@@ -1,0 +1,44 @@
+<div class="colorpickerContainer">
+    <div class="tabs">
+        <ul>
+            <li data-id="hsv" class="active">HSV</li>
+            <li data-id="circle">Circle</li>
+        </ul>
+    </div>
+
+    <div class="pickers">
+        <div data-id="hsv" class="pickerContainer">
+            <canvas class="colorpicker" width="300" height="300"></canvas>
+            <div class="value">
+                <canvas class="colorselect" width="30" height="300"></canvas>
+                <div class="selectpreview"></div>
+            </div>
+        </div>
+
+        <div data-id="circle" class="pickerContainer">
+            <canvas class="colorpickerCircle" width="300" height="300"></canvas>
+        </div>
+
+    </div>
+
+    <div class="preview">
+        <div class="colorSelected"></div>
+        <div class="colorPreview"></div>
+    </div>
+
+    <div class="colors">
+        <p class="rgba">
+            <span>RGBA:</span>
+            <input type="text" value="">
+        </p>
+        <p class="hsl">
+            <span>HSL:</span>
+            <input type="text" value="">
+        </p>
+        <p class="hex">
+            <span>HEX:</span>
+            <input type="text" value="">
+        </p>
+    </div>
+
+</div>

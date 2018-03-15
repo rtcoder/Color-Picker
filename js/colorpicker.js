@@ -219,61 +219,10 @@ var Convert = {
             }
             $('body').append('<div class="colorpickerContainer" data-id="' + gid + '"></div>');
             $this.colorpickerContainer = $('.colorpickerContainer[data-id=' + gid + ']');
-
-            let tabsHTML = `
-                        <div class="tabs">
-                            <ul>
-                                <li data-id="hsv" class="active">HSV</li>
-                                <li data-id="circle">Circle</li>
-                            </ul>
-                        </div>`;
-            $this.colorpickerContainer.append(tabsHTML);
-
-            $this.colorpickerContainer.append('<div class="pickers"></div>');
-
-            let hsvHTML = `
-                        <div data-id="hsv" class="pickerContainer">
-                            <canvas class="colorpicker" width="300" height="300"></canvas>
-                            <div class="value">
-                                <canvas class="colorselect" width="30" height="300"></canvas>
-                                <div class="selectpreview"></div>
-                            </div>
-                        </div>`;
-            $this.colorpickerContainer.find('.pickers').append(hsvHTML);
-
-            let circleHTML = `
-                        <div data-id="circle" class="pickerContainer">
-                            <canvas class="colorpickerCircle" width="300" height="300"></canvas>
-                        </div>`;
-            $this.colorpickerContainer.find('.pickers').append(circleHTML);
-
             $this.colorpickerContainer.find('.pickerContainer').first().addClass('active');
 
-            let previewHTML = `
-                    <div class="preview">
-                        <div class="colorSelected"></div>
-                        <div class="colorPreview"></div>
-                    </div>`;
-            $this.colorpickerContainer.append(previewHTML);
-
             if (this.defaultOptions.colorValues === true) {
-                let colorsHTML = `
-                        <div class="colors">
-                            <p class="rgba">
-                                <span>RGBA:</span>
-                                <input type="text" value="">
-                            </p>
-                            <p class="hsl">
-                                <span>HSL:</span>
-                                <input type="text" value="">
-                            </p>
-                            <p class="hex">
-                                <span>HEX:</span>
-                                <input type="text" value="">
-                            </p>
-                        </div>`;
-
-                $this.colorpickerContainer.append(colorsHTML);
+                $this.colorpickerContainer.attr('colorvalues', 'true');
             }
         };
         this.events = function () {

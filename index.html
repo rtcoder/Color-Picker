@@ -14,7 +14,6 @@
         <script>
 
             $('button#a').colorpicker({
-                type: 'hsv',
                 onChange: function (color) {
                     $('button#a').css({
                         'color': color
@@ -26,7 +25,6 @@
                 }
             });
             $('button#b').colorpicker({
-                type: 'all',
                 onChange: function (color) {
                     $('button#b').css({
                         'background-color': color

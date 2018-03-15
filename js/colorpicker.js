@@ -20,7 +20,7 @@ var guid = function () {
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
-}
+};
 
 var Convert = {
     unitConversion: function (unit) {
@@ -111,28 +111,25 @@ var Convert = {
         this.ctxSelectHSV = null;
         this.ctxCircle = null;
         this.selectMusedown = false;
-        this.types = [
-            'all',
-            'hsv',
-            'circle'
-        ];
         this.selectedColor = null;
         this.defaultOptions = {
-            type: 'all',
             colorValues: true,
             closeOn: 'change',
             onChange: function (color) {},
             onRender: function () {},
             onShow: function () {},
-            onHide: function () {}
+            onHide: function () {},
+            onSelect: function (color) {}
         };
         this.hide = function () {
             $this.colorpickerContainer.hide();
             this.defaultOptions.onHide();
         };
         this.show = function () {
-            $this.colorpickerContainer.show();
-            this.defaultOptions.onShow();
+            this.init(function () {
+                $this.colorpickerContainer.show();
+                $this.defaultOptions.onShow();
+            });
         };
         this.colorsampler = function (event, obj) {
             let rect = obj.getBoundingClientRect();
@@ -223,58 +220,58 @@ var Convert = {
             $('body').append('<div class="colorpickerContainer" data-id="' + gid + '"></div>');
             $this.colorpickerContainer = $('.colorpickerContainer[data-id=' + gid + ']');
 
-            if (this.defaultOptions.type === 'all') {
-                let tabsHTML = '<div class="tabs">\n' +
-                        '<ul>\n' +
-                        '<li data-id="hsv" class="active">HSV</li>\n' +
-                        '<li data-id="circle">Circle</li>\n' +
-                        '</ul>\n' +
-                        '</div>';
-                $this.colorpickerContainer.append(tabsHTML);
-            }
+            let tabsHTML = `
+                        <div class="tabs">
+                            <ul>
+                                <li data-id="hsv" class="active">HSV</li>
+                                <li data-id="circle">Circle</li>
+                            </ul>
+                        </div>`;
+            $this.colorpickerContainer.append(tabsHTML);
 
             $this.colorpickerContainer.append('<div class="pickers"></div>');
 
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'hsv') {
-                let hsvHTML = '<div data-id="hsv" class="pickerContainer">\n' +
-                        '<canvas class="colorpicker" width="300" height="300"></canvas>\n' +
-                        '<div class="value">\n' +
-                        '<canvas class="colorselect" width="30" height="300"></canvas>\n' +
-                        '<div class="selectpreview"></div>\n' +
-                        '</div>\n' +
-                        '</div>';
-                $this.colorpickerContainer.find('.pickers').append(hsvHTML);
-            }
+            let hsvHTML = `
+                        <div data-id="hsv" class="pickerContainer">
+                            <canvas class="colorpicker" width="300" height="300"></canvas>
+                            <div class="value">
+                                <canvas class="colorselect" width="30" height="300"></canvas>
+                                <div class="selectpreview"></div>
+                            </div>
+                        </div>`;
+            $this.colorpickerContainer.find('.pickers').append(hsvHTML);
 
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'circle') {
-                let circleHTML = '<div data-id="circle" class="pickerContainer">\n' +
-                        '<canvas class="colorpickerCircle" width="300" height="300"></canvas>\n' +
-                        '</div>';
-                $this.colorpickerContainer.find('.pickers').append(circleHTML);
-            }
+            let circleHTML = `
+                        <div data-id="circle" class="pickerContainer">
+                            <canvas class="colorpickerCircle" width="300" height="300"></canvas>
+                        </div>`;
+            $this.colorpickerContainer.find('.pickers').append(circleHTML);
+
             $this.colorpickerContainer.find('.pickerContainer').first().addClass('active');
 
-            let previewHTML = '<div class="preview">\n' +
-                    '<div class="colorSelected"></div>\n' +
-                    '<div class="colorPreview"></div>\n' +
-                    '</div>';
+            let previewHTML = `
+                    <div class="preview">
+                        <div class="colorSelected"></div>
+                        <div class="colorPreview"></div>
+                    </div>`;
             $this.colorpickerContainer.append(previewHTML);
 
             if (this.defaultOptions.colorValues === true) {
-                let colorsHTML = '<div class="colors">\n' +
-                        '<p class="rgba">\n' +
-                        '<span>RGBA:</span>\n' +
-                        '<input type="text" value="">\n' +
-                        '</p>\n' +
-                        '<p class="hsl">\n' +
-                        '<span>HSL:</span>\n' +
-                        '<input type="text" value="">\n' +
-                        '</p>\n' +
-                        '<p class="hex">\n' +
-                        '<span>HEX:</span>\n' +
-                        '<input type="text" value="">\n' +
-                        '</p>\n' +
-                        '</div>';
+                let colorsHTML = `
+                        <div class="colors">
+                            <p class="rgba">
+                                <span>RGBA:</span>
+                                <input type="text" value="">
+                            </p>
+                            <p class="hsl">
+                                <span>HSL:</span>
+                                <input type="text" value="">
+                            </p>
+                            <p class="hex">
+                                <span>HEX:</span>
+                                <input type="text" value="">
+                            </p>
+                        </div>`;
 
                 $this.colorpickerContainer.append(colorsHTML);
             }
@@ -285,68 +282,65 @@ var Convert = {
                 $(this).parent().find('li').removeClass('active');
                 $(this).addClass('active');
                 $('.pickerContainer').removeClass('active');
-                $('.pickerContainer[data-id' + id + ']').addClass('active');
+                $('.pickerContainer[data-id=' + id + ']').addClass('active');
 
             });
 
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'hsv') {
-                $($this.canvasHSV).on('mousemove', function (e) {
-                    $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
-                }).on('click', function (e) {
-                    $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
-                    let color = $this.colorsampler(e, this);
-                    $this.defaultOptions.onChange(color);
+            $($this.canvasHSV).on('mousemove', function (e) {
+                $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
+            }).on('click', function (e) {
+                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
+                let color = $this.colorsampler(e, this);
+                $this.defaultOptions.onChange(color);
+            });
+            $($this.canvasSelectHSV).on('mousedown', function (e) {
+                $this.selectMusedown = true;
+                let rgba = $this.colorselect(e);
+                $this.generateHSV(rgba.hsl[0]);
+            }).on('mouseup', function () {
+                $this.selectMusedown = false;
+            }).on('mousemove', function (e) {
+                let color = $this.colorselect(e);
+                if ($this.selectMusedown) {
+                    $this.generateHSV(color.hsl[0]);
+                }
+                let rect = this.getBoundingClientRect();
+                let y = event.pageY - rect.top;
+                $this.colorpickerContainer.find('.selectpreview').css({
+                    top: y + 'px',
+                    background: color.hex
                 });
-                $($this.canvasSelectHSV).on('mousedown', function (e) {
-                    $this.selectMusedown = true;
-                    let rgba = $this.colorselect(e);
-                    $this.generateHSV(rgba.hsl[0]);
-                }).on('mouseup', function () {
-                    $this.selectMusedown = false;
-                }).on('mousemove', function (e) {
-                    let color = $this.colorselect(e);
-                    if ($this.selectMusedown) {
-                        $this.generateHSV(color.hsl[0]);
-                    }
-                    let rect = this.getBoundingClientRect();
-                    let y = event.pageY - rect.top;
-                    $this.colorpickerContainer.find('.selectpreview').css({
-                        top: y + 'px',
-                        background: color.hex
-                    });
-                }).mouseleave(function (e) {
-                    $this.selectMusedown = false;
-                });
-            }
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'circle') {
-                $($this.canvasCircle).on('mousemove', function (e) {
-                    $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
-                }).on('click', function (e) {
-                    $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
-                });
-            }
+            }).mouseleave(function (e) {
+                $this.selectMusedown = false;
+            });
+
+            $($this.canvasCircle).on('mousemove', function (e) {
+                $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
+            }).on('click', function (e) {
+                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
+                let color = $this.colorsampler(e, this);
+                $this.defaultOptions.onChange(color);
+            });
         };
-        this.init = function () {
+        this.init = function (callback) {
             this.render();
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'hsv') {
-                $this.canvasHSV = $this.colorpickerContainer.find('.colorpicker')[0];
-                $this.canvasSelectHSV = $this.colorpickerContainer.find('.colorselect')[0];
-                $this.ctxHSV = $this.canvasHSV.getContext('2d');
-                $this.ctxSelectHSV = $this.canvasSelectHSV.getContext('2d');
-            }
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'circle') {
-                $this.canvasCircle = $this.colorpickerContainer.find('.colorpickerCircle')[0];
-                $this.ctxCircle = $this.canvasCircle.getContext('2d');
-            }
+            $this.canvasHSV = $this.colorpickerContainer.find('.colorpicker')[0];
+            $this.canvasSelectHSV = $this.colorpickerContainer.find('.colorselect')[0];
+            $this.ctxHSV = $this.canvasHSV.getContext('2d');
+            $this.ctxSelectHSV = $this.canvasSelectHSV.getContext('2d');
+
+            $this.canvasCircle = $this.colorpickerContainer.find('.colorpickerCircle')[0];
+            $this.ctxCircle = $this.canvasCircle.getContext('2d');
+
             this.events();
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'hsv') {
-                this.generateHSV(88);
-                this.generateRangeHSV();
-            }
-            if (this.defaultOptions.type === 'all' || this.defaultOptions.type === 'circle') {
-                this.generateCircleColorpicker();
-            }
+
+            this.generateHSV(88);
+            this.generateRangeHSV();
+
+            this.generateCircleColorpicker();
+
             this.defaultOptions.onRender();
+            callback();
         };
 
         if (typeof options !== 'object' && typeof options !== 'undefined') {
@@ -359,10 +353,7 @@ var Convert = {
         if (typeof this.defaultOptions.onRender !== 'function') {
             throw new InvalidTypeError("param 'options.onRender' must be a function not " + typeof this.defaultOptions.onRender);
         }
-        if ($.inArray(this.defaultOptions.type, this.types) < 0) {
-            throw new InvalidValueError('invalid value for param options.type');
-        }
-        this.init();
+//        this.init();
         this.click(function () {
             $this.show();
         });

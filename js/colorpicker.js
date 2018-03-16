@@ -247,15 +247,13 @@ class Convert {
         this.generateCircleColorpicker = function () {
             this.CX = $this.canvasCircle.width / 2;
             this.CY = $this.canvasCircle.height / 2;
-            this.sx = this.CX;
-            this.sy = this.CY;
 
             for (let i = 0; i < 360; i += 0.1) {
                 let rad = i * (2 * Math.PI) / 360;
                 $this.ctxCircle.strokeStyle = "hsla(" + i + ", 100%, 50%, 1.0)";
                 $this.ctxCircle.beginPath();
                 $this.ctxCircle.moveTo(this.CX, this.CY);
-                $this.ctxCircle.lineTo(this.CX + this.sx * Math.cos(rad), this.CY + this.sy * Math.sin(rad));
+                $this.ctxCircle.lineTo(this.CX + this.CX * Math.cos(rad), this.CY + this.CY * Math.sin(rad));
                 $this.ctxCircle.stroke();
             }
         };

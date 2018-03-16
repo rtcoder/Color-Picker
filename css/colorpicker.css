@@ -133,4 +133,11 @@
 .colorpickerContainer .colors p input:last-child {
   float: right;
 }
+.colorpickerContainer .author {
+  height: 20px;
+  line-height: 20px;
+  float: right;
+  right: 0;
+  margin-right: 20px;
+}
 /*# sourceMappingURL=colorpicker.css.map */

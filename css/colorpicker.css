@@ -26,32 +26,48 @@
   box-sizing: border-box;
 }
 .colorpickerContainer .tabs {
-  width: 100%;
+  width: calc(100% - 20px);
   float: left;
-  height: 30px;
-  line-height: 30px;
+  height: 20px;
+  line-height: 20px;
 }
 .colorpickerContainer .tabs ul {
   list-style: none;
   margin: 0;
   padding: 0;
   float: left;
-  height: 30px;
-  line-height: 30px;
+  height: 20px;
+  line-height: 20px;
 }
 .colorpickerContainer .tabs ul li {
   padding: 0px 5px;
   width: auto;
   float: left;
   color: #eee;
-  height: 30px;
-  line-height: 30px;
+  height: 20px;
+  line-height: 20px;
   cursor: pointer;
-  border: 1px solid #ddd;
-  border-bottom: none;
+  border: 1px solid #636363;
+  border-bottom-width: 0px;
+  border-right-width: 0px;
 }
 .colorpickerContainer .tabs ul li.active {
   color: #09c;
+}
+.colorpickerContainer .tabs ul li:last-child {
+  border-right-width: 1px;
+}
+.colorpickerContainer .closePicker {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background: #f40;
+  color: #fff;
+  font-size: 15px;
+  float: left;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
 }
 .colorpickerContainer .pickers {
   width: 100%;
@@ -134,13 +150,16 @@
   float: right;
 }
 .colorpickerContainer .author {
+  width: 100%;
   height: 20px;
   line-height: 20px;
-  float: right;
+  float: left;
   right: 0;
   margin-right: 20px;
   font-size: 13px;
   color: #ccc;
+  margin-top: 5px;
+  border-top: 1px solid #ccc;
 }
 .colorpickerContainer .author a {
   color: #eee;

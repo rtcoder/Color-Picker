@@ -139,5 +139,10 @@
   float: right;
   right: 0;
   margin-right: 20px;
+  font-size: 13px;
+  color: #ccc;
+}
+.colorpickerContainer .author a {
+  color: #eee;
 }
 /*# sourceMappingURL=colorpicker.css.map */

@@ -169,7 +169,7 @@ class Convert {
 
 
         this.hide = function () {
-            $this.colorpickerContainer.hide();
+            $this.colorpickerContainer.remove();
             this.defaultOptions.onHide();
         };
         this.show = function () {
@@ -280,8 +280,11 @@ class Convert {
                 $('.pickerContainer[data-id=' + id + ']').addClass('active');
 
             });
+            $this.colorpickerContainer.find('.closePicker').click(function (e) {
+                $this.hide();
+            });
 
-            $($this.canvasHSV).on('mousemove', function (e) {
+            $($this.canvasHSV).add($this.canvasCircle).on('mousemove', function (e) {
                 $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
             }).on('click', function (e) {
                 $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
@@ -309,13 +312,6 @@ class Convert {
                 $this.selectMusedown = false;
             });
 
-            $($this.canvasCircle).on('mousemove', function (e) {
-                $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
-            }).on('click', function (e) {
-                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
-                let color = $this.colorsampler(e, this);
-                $this.defaultOptions.onChange(color);
-            });
         };
         this.init = function (callback) {
             this.render();

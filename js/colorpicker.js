@@ -22,12 +22,24 @@ var guid = function () {
             s4() + '-' + s4() + s4() + s4();
 };
 
-var Convert = {
-    unitConversion: function (unit) {
-        var hexconv = unit.toString(16);
+class Convert {
+    /**
+     *
+     * @param integer unit
+     * @return {Convert.unitConversion.hexconv|String}
+     */
+    unitConversion(unit) {
+        let hexconv = unit.toString(16);
         return hexconv.length === 1 ? '0' + hexconv : hexconv;
-    },
-    hue2rgb: function (h, u, e) {
+    }
+    /**
+     *
+     * @param integer h
+     * @param integer u
+     * @param integer e
+     * @return integer
+     */
+    hue2rgb(h, u, e) {
         if (e < 0)
             e += 1;
         if (e > 1)
@@ -39,20 +51,39 @@ var Convert = {
         if (e < 2 / 3)
             return h + (u - h) * (2 / 3 - t) * 6;
         return h;
-    },
-    hexToRgb: function (hex) {
+    }
+    /**
+     *
+     * @param string hex
+     * @return object
+     */
+    hexToRgb(hex) {
         let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
         } : null;
-    },
-    RGBtoHex: function (r, g, b) {
-        this.hexString = "#" + this.unitConversion(r) + this.unitConversion(g) + this.unitConversion(b);
-        return this.hexString;
-    },
-    hslToRgb: function (h, s, l) {
+    }
+    /**
+     *
+     * @param integer r
+     * @param integer g
+     * @param integer b
+     * @return string
+     */
+    RGBtoHex(r, g, b) {
+        let hexString = "#" + this.unitConversion(r) + this.unitConversion(g) + this.unitConversion(b);
+        return hexString;
+    }
+    /**
+     *
+     * @param integer h
+     * @param integer s
+     * @param integer l
+     * @return array
+     */
+    hslToRgb(h, s, l) {
         let r, g, b;
 
         if (s === 0) {
@@ -66,8 +97,15 @@ var Convert = {
         }
 
         return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    },
-    rgbToHsl: function (r, g, b) {
+    }
+    /**
+     *
+     * @param integer r
+     * @param integer g
+     * @param integer b
+     * @return array
+     */
+    rgbToHsl(r, g, b) {
         r /= 255, g /= 255, b /= 255;
         let max = Math.max(r, g, b), min = Math.min(r, g, b);
         let h, s, l = (max + min) / 2;
@@ -93,17 +131,17 @@ var Convert = {
 
         return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
     }
-};
-
+}
 
 (function ($) {
     "use strict";
     /**
-     * @param {object} options Options
+     * @param object options Options
      * @param string colorpickerHTML_URL Alternative link for colorpicker html if is used as plugin
      */
     $.fn.colorpicker = function (options, colorpickerHTML_URL) {
         var $this = this;
+        this.converter = new Convert();
         this.colorpickerContainer = null;
         this.canvasSelectHSV = null;
         this.canvasHSV = null;
@@ -124,7 +162,6 @@ var Convert = {
             onHide: function () {},
             onSelect: function (color) {}
         };
-
 
         $.get(this.colorpickerHTML_URL, function (data) {
             $this.colorpickerHTML = $(data);
@@ -154,8 +191,8 @@ var Convert = {
             let alpha = p[3];
             let a = Math.floor((100 * alpha) / 255) / 100;
 
-            if (a >= 0) {
-                colorCode = Convert.RGBtoHex(r, g, b);
+            if (a === 1) {
+                colorCode = $this.converter.RGBtoHex(r, g, b);
             } else {
                 colorCode = "rgba(" + r + "," + g + "," + b + "," + a + ")";
             }
@@ -178,8 +215,8 @@ var Convert = {
             let a = Math.floor((100 * alpha) / 255) / 100;
             return {
                 rgba: [r, g, b, a],
-                hsl: Convert.rgbToHsl(r, g, b),
-                hex: Convert.RGBtoHex(r, g, b)
+                hsl: $this.converter.rgbToHsl(r, g, b),
+                hex: $this.converter.RGBtoHex(r, g, b)
             };
         };
         this.generateHSV = function (hue) {

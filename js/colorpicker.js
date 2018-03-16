@@ -223,8 +223,8 @@ var Convert = {
         };
         this.render = function () {
             let gid = guid();
-            if ($('.colorpickerContainer[data-id=' + gid + ']').length) {
-                $('.colorpickerContainer[data-id=' + gid + ']').remove();
+            if ($('.colorpickerContainer').length) {
+                $('.colorpickerContainer').remove();
             }
             $('body').append($this.colorpickerHTML);
             $('.colorpickerContainer').attr('data-id', gid);

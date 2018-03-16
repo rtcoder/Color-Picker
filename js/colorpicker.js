@@ -100,6 +100,7 @@ var Convert = {
     "use strict";
     /**
      * @param {object} options Options
+     * @param string colorpickerHTML_URL Alternative link for colorpicker html if is used as plugin
      */
     $.fn.colorpicker = function (options, colorpickerHTML_URL) {
         var $this = this;

@@ -278,8 +278,10 @@ class Convert {
                 $(this).addClass('active');
                 $('.pickerContainer').removeClass('active');
                 $('.pickerContainer[data-id=' + id + ']').addClass('active');
-
             });
+
+            $this.colorpickerContainer.find('.tabs ul li').first().click();
+
             $this.colorpickerContainer.find('.closePicker').click(function (e) {
                 $this.hide();
             });

@@ -101,7 +101,7 @@ var Convert = {
     /**
      * @param {object} options Options
      */
-    $.fn.colorpicker = function (options) {
+    $.fn.colorpicker = function (options, colorpickerHTML_URL) {
         var $this = this;
         this.colorpickerContainer = null;
         this.canvasSelectHSV = null;
@@ -112,6 +112,8 @@ var Convert = {
         this.ctxCircle = null;
         this.selectMusedown = false;
         this.selectedColor = null;
+        this.colorpickerHTML = null;
+        this.colorpickerHTML_URL = colorpickerHTML_URL ? colorpickerHTML_URL : 'html/colorpicker.html';
         this.defaultOptions = {
             colorValues: true,
             closeOn: 'change',
@@ -121,6 +123,13 @@ var Convert = {
             onHide: function () {},
             onSelect: function (color) {}
         };
+
+
+        $.get(this.colorpickerHTML_URL, function (data) {
+            $this.colorpickerHTML = $(data);
+        });
+
+
         this.hide = function () {
             $this.colorpickerContainer.hide();
             this.defaultOptions.onHide();
@@ -217,7 +226,8 @@ var Convert = {
             if ($('.colorpickerContainer[data-id=' + gid + ']').length) {
                 $('.colorpickerContainer[data-id=' + gid + ']').remove();
             }
-            $('body').append('<div class="colorpickerContainer" data-id="' + gid + '"></div>');
+            $('body').append($this.colorpickerHTML);
+            $('.colorpickerContainer').attr('data-id', gid);
             $this.colorpickerContainer = $('.colorpickerContainer[data-id=' + gid + ']');
             $this.colorpickerContainer.find('.pickerContainer').first().addClass('active');
 
@@ -295,7 +305,9 @@ var Convert = {
         if (typeof options !== 'object' && typeof options !== 'undefined') {
             throw new InvalidTypeError("param 'options' must be an Object not " + typeof options);
         }
+
         $.extend(this.defaultOptions, options);
+
         if (typeof this.defaultOptions.onChange !== 'function') {
             throw new InvalidTypeError("param 'options.onChange' must be a function not " + typeof this.defaultOptions.onChange);
         }

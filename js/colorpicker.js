@@ -115,8 +115,13 @@ class Convert {
         this.ctxSelectHSV = null;
         this.ctxCircle = null;
         this.selectMusedown = false;
-        this.selectedColor = null;
+        this.selectedColor = {
+            rgba: null,
+            hsl: null,
+            hex: null
+        };
         this.colorpickerHTML = null;
+        this.selectHistory = [];
         this.colorpickerHTML_URL = colorpickerHTML_URL ? colorpickerHTML_URL : 'html/colorpicker.html';
         this.defaultOptions = {
             colorValues: true,
@@ -131,6 +136,44 @@ class Convert {
             $this.colorpickerHTML = $(data);
         });
 
+        this.updateSelectHistory = function (color) {
+            if (!color || !color.hex) {
+                return;
+            }
+            for (let c of  this.selectHistory) {
+                if (color.hex === c.hex) {
+                    return;
+                }
+            }
+            this.selectHistory.push(color);
+            if (this.selectHistory.length > 10) {
+                this.selectHistory.shift();
+            }
+            localStorage.selectHistory = JSON.stringify(this.selectHistory);
+            $this.generateColorBoxes();
+        };
+        this.clearSelectHistory = function () {
+            $this.selectHistory = [];
+            localStorage.selectHistory = JSON.stringify($this.selectHistory);
+            $this.generateColorBoxes();
+        };
+        this.generateColorBoxes = function () {
+            let selectHistoryContainer = $this.colorpickerContainer.find('.selectHistory .content');
+            selectHistoryContainer.empty();
+            if (this.selectHistory.length === 0) {
+                selectHistoryContainer.addClass('empty');
+                return;
+            }
+            selectHistoryContainer.removeClass('empty');
+            for (let i in this.selectHistory) {
+                let color = this.selectHistory[i];
+                selectHistoryContainer.append('<div class="item" data-key="' + i + '" style="background: ' + color.hex + '"></div>');
+            }
+            selectHistoryContainer.find('.item').click(function () {
+                let i = $(this).data('key');
+                $this.setColor($this.selectHistory[i]);
+            });
+        };
         this.hide = function () {
             $this.colorpickerContainer.remove();
             this.defaultOptions.onHide();
@@ -140,6 +183,13 @@ class Convert {
                 $this.colorpickerContainer.show();
                 $this.defaultOptions.onShow();
             });
+        };
+        this.setColor = function (color) {
+            $this.selectedColor = color;
+            $this.colorpickerContainer.find('.colorSelected').css('background', $this.selectedColor.hex);
+            $this.colorpickerContainer.find('.hex input').val($this.selectedColor.hex);
+            $this.colorpickerContainer.find('.hsl input').val('hsl(' + $this.selectedColor.hsl.join(', ') + ')');
+            $this.colorpickerContainer.find('.rgba input').val('rgba(' + $this.selectedColor.rgba.join(', ') + ')');
         };
         this.colorselect = function (event, obj) {
             let rect = obj.getBoundingClientRect();
@@ -206,6 +256,7 @@ class Convert {
             $this.colorpickerContainer = $('.colorpickerContainer[data-id=' + gid + ']');
             $this.colorpickerContainer.find('.pickerContainer').first().addClass('active');
 
+            $this.generateColorBoxes();
             if (this.defaultOptions.colorValues === true) {
                 $this.colorpickerContainer.attr('colorvalues', 'true');
             }
@@ -226,9 +277,12 @@ class Convert {
             });
             $this.colorpickerContainer.find('.apply').click(function (e) {
                 $this.hide();
+                $this.updateSelectHistory($this.selectedColor);
                 $this.defaultOptions.onSelect($this.selectedColor);
             });
-
+            $this.colorpickerContainer.find('.selectHistory .clearSelectHistory').click(function () {
+                $this.clearSelectHistory();
+            });
             $this.colorpickerContainer.find('button.copy').click(function () {
                 if ($(this).parent().find('input').val() === "") {
                     return;
@@ -239,11 +293,9 @@ class Convert {
             $($this.canvasHSV).add($this.canvasCircle).on('mousemove', function (e) {
                 $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorselect(e, this).hex);
             }).on('click', function (e) {
-                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorselect(e, this).hex);
-                $this.selectedColor = $this.colorselect(e, this);
-                $this.colorpickerContainer.find('.hex input').val($this.selectedColor.hex);
-                $this.colorpickerContainer.find('.hsl input').val('hsl(' + $this.selectedColor.hsl.join(', ') + ')');
-                $this.colorpickerContainer.find('.rgba input').val('rgba(' + $this.selectedColor.rgba.join(', ') + ')');
+                $this.setColor($this.colorselect(e, this));
+
+                $this.updateSelectHistory($this.selectedColor);
                 $this.defaultOptions.onChange($this.selectedColor);
             });
             $($this.canvasSelectHSV).on('mousedown', function (e) {
@@ -269,6 +321,9 @@ class Convert {
 
         };
         this.init = function (callback) {
+            this.selectHistory = localStorage.getItem('selectHistory') ? JSON.parse(localStorage.getItem('selectHistory')) : [];
+            localStorage.selectHistory = JSON.stringify(this.selectHistory);
+
             this.render();
             $this.canvasHSV = $this.colorpickerContainer.find('.colorpicker')[0];
             $this.canvasSelectHSV = $this.colorpickerContainer.find('.colorselect')[0];

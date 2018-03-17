@@ -15,7 +15,8 @@
     -ms-user-select: none;
     user-select: none;
     z-index: 9999;
-    display: none;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
     * {
         -webkit-user-select: none;
@@ -25,21 +26,25 @@
         box-sizing: border-box;
     }
     .tabs {
-        width: ~"calc(100% - 20px)";
-        float: left;
+        width: 100%;
         height: 20px;
         line-height: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         ul {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
             list-style: none;
             margin: 0;
             padding: 0;
-            float: left;
             height: 20px;
             line-height: 20px;
             li {
+                align-self: center;
                 padding: 0px 5px;
                 width: auto;
-                float: left;
                 color: #eee;
                 height: 20px;
                 line-height: 20px;
@@ -56,55 +61,63 @@
             }
         }
     }
-    .closePicker{
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        background: #f40;
-        color: #fff;
-        font-size: 15px;
-        float: left;
-        text-align: center;
-        cursor: pointer;
-        font-weight: bold;
+    .buttonContainer{
+        width: 100%;
+        margin-top: 5px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        .apply,
+        .close{
+            width: 50px;
+            height: 20px;
+            line-height: 20px;
+            color: #fff;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .close{
+            background: #f40;
+        }
+        .apply{
+            background: #3dcc13;
+        }
     }
     .pickers {
         width: 100%;
-        float: left;
         .pickerContainer {
             width: 100%;
             height: 320px;
-            float: left;
             display: none;
             padding: 10px;
             text-align: center;
+            justify-content: center;
             &.active {
-                display: block;
+                display: flex;
             }
             &#circle{
                 text-align: center;
             }
             canvas {
-                float: left;
                 cursor: crosshair;
                 &.colorpickerCircle {
                     border-radius: 100%;
-                    float: none;
                     display: inline-block;
                 }
             }
             .value {
                 width: 30px;
                 height: 300px;
-                float: left;
                 position: relative;
                 .selectpreview {
                     content: ' ';
                     position: absolute;
                     top: 0;
-                    left: 30px;
+                    left: 35px;
                     width: 30px;
-                    height: 10px;
+                    height: 30px;
                     display: none;
                     -webkit-transform: translate(0, -50%);
                     -moz-transform: translate(0, -50%);
@@ -112,7 +125,12 @@
                     -o-transform: translate(0, -50%);
                     transform: translate(0, -50%);
                     border: 1px solid rgba(44, 30, 0, 0.59);
-                    border-left: none;
+                    border-radius: 30px;
+                    border-top-left-radius: 0px;
+                    transform: rotate(-45deg);
+                    &:hover {
+                        display: block;
+                    }
                 }
                 .colorselect {
                     cursor: pointer;
@@ -127,29 +145,50 @@
         }
     }
     .preview {
-        float: left;
         width:100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
         .colorPreview,
         .colorSelected {
-            width: 50%;
-            height: 30px;
-            float: left;
+            width: 70px;
+            height: 15px;
+            border: 1px solid #252525;
             background: transparent;
         }
     }
     .colors{
-        color: #ffffff;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
         width: 100%;
-        float: left;
-        p{
+        padding: 5px 0px;
+        >div{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
             width: 100%;
-            float: left;
             margin: 5px 0px;
-            span:first-child{
-                float: left;
+            span.title{
+                padding-right: 5px;
+                font-size: 13px;
+                line-height: 20px;
             }
-            input:last-child{
-                float: right;
+            input{
+                border: none;
+                padding: 0px 5px;
+                width: 150px;
+                height: 20px;
+            }
+            button.copy{
+                width: 20px;
+                height: 20px;
+                padding: 0px 5px;
+                color: #252525;
+                background: #fff;
+                border: none;
+                cursor: pointer;
+                border-left: 1px solid #252525;
             }
         }
     }
@@ -157,9 +196,7 @@
         width: 100%;
         height: 20px;
         line-height: 20px;
-        float: left;
         right: 0;
-        margin-right: 20px;
         font-size: 13px;
         color: #ccc;
         margin-top: 5px;

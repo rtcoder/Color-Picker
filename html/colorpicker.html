@@ -6,7 +6,6 @@
         </ul>
     </div>
 
-    <div class="closePicker" title="Close">&times;</div>
 
     <div class="pickers">
         <div data-id="hsv" class="pickerContainer">
@@ -28,22 +27,26 @@
     </div>
 
     <div class="colors">
-        <p class="rgba">
-            <span>RGBA:</span>
+        <div class="rgba">
+            <span class="title">rgba:</span>
             <input type="text" value="">
-        </p>
-        <p class="hsl">
-            <span>HSL:</span>
+            <button type="button" title="Copy to clipboard" class="copy">&swarrow;</button>
+        </div>
+        <div class="hsl">
+            <span class="title">hsl:</span>
             <input type="text" value="">
-        </p>
-        <p class="hex">
-            <span>HEX:</span>
+            <button type="button" title="Copy to clipboard" class="copy">&swarrow;</button>
+        </div>
+        <div class="hex">
+            <span class="title">hex:</span>
             <input type="text" value="">
-        </p>
+            <button type="button" title="Copy to clipboard" class="copy">&swarrow;</button>
+        </div>
     </div>
 
     <div class="buttonContainer">
-        <button class="apply">Apply</button>
+        <div class="apply" title="Apply">&check;</div>
+        <div class="close" title="Close">&times;</div>
     </div>
 
     <div class="author">

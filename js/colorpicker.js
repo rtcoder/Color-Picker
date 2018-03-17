@@ -54,19 +54,6 @@ class Convert {
     }
     /**
      *
-     * @param string hex
-     * @return object
-     */
-    hexToRgb(hex) {
-        let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-        return result ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16)
-        } : null;
-    }
-    /**
-     *
      * @param integer r
      * @param integer g
      * @param integer b
@@ -75,28 +62,6 @@ class Convert {
     RGBtoHex(r, g, b) {
         let hexString = "#" + this.unitConversion(r) + this.unitConversion(g) + this.unitConversion(b);
         return hexString;
-    }
-    /**
-     *
-     * @param integer h
-     * @param integer s
-     * @param integer l
-     * @return array
-     */
-    hslToRgb(h, s, l) {
-        let r, g, b;
-
-        if (s === 0) {
-            r = g = b = l;
-        } else {
-            let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-            let p = 2 * l - q;
-            r = this.hue2rgb(p, q, h + 1 / 3);
-            g = this.hue2rgb(p, q, h);
-            b = this.hue2rgb(p, q, h - 1 / 3);
-        }
-
-        return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
     }
     /**
      *
@@ -157,7 +122,6 @@ class Convert {
             colorValues: true,
             closeOn: 'change',
             onChange: function (color) {},
-            onRender: function () {},
             onShow: function () {},
             onHide: function () {},
             onSelect: function (color) {}
@@ -166,7 +130,6 @@ class Convert {
         $.get(this.colorpickerHTML_URL, function (data) {
             $this.colorpickerHTML = $(data);
         });
-
 
         this.hide = function () {
             $this.colorpickerContainer.remove();
@@ -178,36 +141,12 @@ class Convert {
                 $this.defaultOptions.onShow();
             });
         };
-        this.colorsampler = function (event, obj) {
+        this.colorselect = function (event, obj) {
             let rect = obj.getBoundingClientRect();
             let c = obj.getContext('2d');
             let x = event.pageX - rect.left;
             let y = event.pageY - rect.top;
             let p = c.getImageData(x, y, 1, 1).data;
-            let colorCode;
-            let r = p[0];
-            let g = p[1];
-            let b = p[2];
-            let alpha = p[3];
-            let a = Math.floor((100 * alpha) / 255) / 100;
-
-            if (a === 1) {
-                colorCode = $this.converter.RGBtoHex(r, g, b);
-            } else {
-                colorCode = "rgba(" + r + "," + g + "," + b + "," + a + ")";
-            }
-
-            if (colorCode === "0") {
-                colorCode = "transparent";
-            }
-
-            return colorCode;
-        };
-        this.colorselect = function (event) {
-            let rect = $this.canvasSelectHSV.getBoundingClientRect();
-            let x = event.pageX - rect.left;
-            let y = event.pageY - rect.top;
-            let p = $this.ctxSelectHSV.getImageData(x, y, 1, 1).data;
             let r = p[0];
             let g = p[1];
             let b = p[2];
@@ -282,30 +221,44 @@ class Convert {
 
             $this.colorpickerContainer.find('.tabs ul li').first().click();
 
-            $this.colorpickerContainer.find('.closePicker').click(function (e) {
+            $this.colorpickerContainer.find('.close').click(function (e) {
                 $this.hide();
             });
+            $this.colorpickerContainer.find('.apply').click(function (e) {
+                $this.hide();
+                $this.defaultOptions.onSelect($this.selectedColor);
+            });
 
+            $this.colorpickerContainer.find('button.copy').click(function () {
+                if ($(this).parent().find('input').val() === "") {
+                    return;
+                }
+                $(this).parent().find('input').select();
+                document.execCommand("Copy");
+            });
             $($this.canvasHSV).add($this.canvasCircle).on('mousemove', function (e) {
-                $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorsampler(e, this));
+                $this.colorpickerContainer.find('.colorPreview').css('background', $this.colorselect(e, this).hex);
             }).on('click', function (e) {
-                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorsampler(e, this));
-                let color = $this.colorsampler(e, this);
-                $this.defaultOptions.onChange(color);
+                $this.colorpickerContainer.find('.colorSelected').css('background', $this.colorselect(e, this).hex);
+                $this.selectedColor = $this.colorselect(e, this);
+                $this.colorpickerContainer.find('.hex input').val($this.selectedColor.hex);
+                $this.colorpickerContainer.find('.hsl input').val('hsl(' + $this.selectedColor.hsl.join(', ') + ')');
+                $this.colorpickerContainer.find('.rgba input').val('rgba(' + $this.selectedColor.rgba.join(', ') + ')');
+                $this.defaultOptions.onChange($this.selectedColor);
             });
             $($this.canvasSelectHSV).on('mousedown', function (e) {
                 $this.selectMusedown = true;
-                let rgba = $this.colorselect(e);
+                let rgba = $this.colorselect(e, this);
                 $this.generateHSV(rgba.hsl[0]);
             }).on('mouseup', function () {
                 $this.selectMusedown = false;
             }).on('mousemove', function (e) {
-                let color = $this.colorselect(e);
+                let color = $this.colorselect(e, this);
                 if ($this.selectMusedown) {
                     $this.generateHSV(color.hsl[0]);
                 }
                 let rect = this.getBoundingClientRect();
-                let y = event.pageY - rect.top;
+                let y = event.pageY - rect.top - ($this.colorpickerContainer.find('.selectpreview').height() / 2);
                 $this.colorpickerContainer.find('.selectpreview').css({
                     top: y + 'px',
                     background: color.hex
@@ -331,8 +284,6 @@ class Convert {
             this.generateRangeHSV();
 
             this.generateCircleColorpicker();
-
-            this.defaultOptions.onRender();
             callback();
         };
 
@@ -344,9 +295,6 @@ class Convert {
 
         if (typeof this.defaultOptions.onChange !== 'function') {
             throw new InvalidTypeError("param 'options.onChange' must be a function not " + typeof this.defaultOptions.onChange);
-        }
-        if (typeof this.defaultOptions.onRender !== 'function') {
-            throw new InvalidTypeError("param 'options.onRender' must be a function not " + typeof this.defaultOptions.onRender);
         }
 //        this.init();
         this.click(function () {
